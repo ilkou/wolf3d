@@ -12,13 +12,15 @@ int				w3d_close(t_wolf3d *p)
 static void			w3d_init(t_wolf3d *p, char *file)
 {
 	p->h_map = 0;
-	if (w3d_map(p, file, 0, 0) == -1 && write(1, "error: parsing\n", 15))
+	p->mlx = mlx_init();
+	if (w3d_map(p, file, 0, 0) == -1 && write(1, "error: parsing fails\n", 21))
+		exit(EXIT_FAILURE);
+	if (w3d_load_texture(p) == -1 && write(1, "error: load textures fails\n", 27))
 		exit(EXIT_FAILURE);
 	print_map(p);
-    p->pos = (t_vec2d){22.0, 12.0};
-    p->dir = (t_vec2d){-1.0, 0.0};
-    p->plane = (t_vec2d){0.0, 0.66};
-	p->mlx = mlx_init();
+	p->pos = (t_vec2d){1.2, 1.2};
+	p->dir = (t_vec2d){-1.0, 0.0};
+	p->plane = (t_vec2d){0.0, 0.66};
 	p->win = mlx_new_window(p->mlx, WIDTH, HEIGHT, "WOLF3D");
 	p->img = mlx_new_image(p->mlx, WIDTH, HEIGHT);
 	p->pixels = (int *)mlx_get_data_addr(p->img, &p->bpp, &p->size_line, &p->endian);

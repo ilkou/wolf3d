@@ -18,7 +18,7 @@ int	w3d_map(t_wolf3d *p, char *file, int i, int j)
 		p->w_map = p->h_map == 0 ? len : p->w_map;
 		if (p->w_map != len)
 			return (-1);
-		if (!(p->map = (char *)ft_realloc((void*)(&p->map), sizeof(char*) * p->h_map * p->w_map, sizeof(char*) * ((p->h_map + 1 ) * p->w_map))))
+		if (!(p->map = (char *)ft_realloc((void*)(&p->map), sizeof(char) * p->h_map * p->w_map, sizeof(char) * ((p->h_map + 1 ) * p->w_map))))
 			return (-1);
 		while (++j < len)
 			p->map[p->h_map * p->w_map + j] = split[j][0];

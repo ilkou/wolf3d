@@ -6,6 +6,17 @@
 
 # define NBTHREAD 4
 
+# define TXT_0 0
+# define TXT_1 1
+# define TXT_2 2
+# define TXT_3 3
+# define TXT_4 4
+# define TXT_5 5
+# define TXT_6 6
+# define TXT_7 7
+
+# define TOTAL_TXT 8
+
 #if defined(__APPLE__)
 # include <key_macos.h>
 #else
@@ -29,11 +40,18 @@ typedef struct			s_vec2d
 	float			y;
 }				t_vec2d;
 
+typedef struct			s_texture
+{
+	void			*img[TOTAL_TXT];
+	int			*buf[TOTAL_TXT];
+}				t_texture;
+
 typedef struct			s_wolf3d
 {
 	t_vec2d			pos;
 	t_vec2d			dir;
 	t_vec2d			plane;
+	t_texture		txt;
 	char			*map;
 	int			w_map;
 	int			h_map;
@@ -70,7 +88,7 @@ int				w3d_putpixel(int *data, int x, int y, int color);
 int				w3d_close(t_wolf3d *p);
 int				w3d_keys(int k, t_wolf3d *p);
 int				w3d_draw(t_wolf3d *p);
-
+int				w3d_load_texture(t_wolf3d *p);
 void				w3d_thread(t_wolf3d *p);
 
 #endif

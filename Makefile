@@ -15,6 +15,7 @@ NAME = wolf3d
 SRC = main.c\
       map.c\
       draw.c\
+      load_texture.c\
       keys.c
 
 SRCS = $(addprefix srcs/w3d_, $(SRC))
