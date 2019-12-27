@@ -3,8 +3,8 @@
 
 int		w3d_keys(int key, t_wolf3d *p)
 {
-    double moveSpeed = 1.0/3.0;
-    double rotSpeed = 1.0/5.0;
+    double moveSpeed = 0.25;
+    double rotSpeed = 10.0 * M_PI / 180.0;
 	if (key == K_ESC)
 		w3d_close(p);
 	//move forward if no wall in front of you

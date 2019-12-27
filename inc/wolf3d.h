@@ -6,15 +6,6 @@
 
 # define NBTHREAD 4
 
-# define TXT_0 0
-# define TXT_1 1
-# define TXT_2 2
-# define TXT_3 3
-# define TXT_4 4
-# define TXT_5 5
-# define TXT_6 6
-# define TXT_7 7
-
 # define TOTAL_TXT 8
 
 #if defined(__APPLE__)
@@ -33,6 +24,16 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <libft.h>
+
+typedef enum			e_side
+{
+	NORD = 0, SUD, EST, OUEST
+}				t_side;
+
+typedef enum			e_txt
+{
+	TXT_0 = 0, TXT_1, TXT_2, TXT_3, TXT_4, TXT_5, TXT_6, TXT_7
+}				t_txt;
 
 typedef struct			s_vec2d
 {

@@ -11,6 +11,18 @@ int		w3d_putpixel(int *pixels, int x, int y, int color)
 	return (-1);
 }
 
+int		w3d_darker(int color, float ratio)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = (int)((color >> 16 & 0xFF) * ratio);
+	g = (int)((color >> 8 & 0xFF) * ratio);
+	b = (int)((color & 0xFF) * ratio);
+	return (r << 16 | g << 8 | b);
+}
+
 void		*w3d_raycaster(t_thread *p)
 {
 	int	x;
@@ -69,19 +81,19 @@ void		*w3d_raycaster(t_thread *p)
 			{
 				sideDistX += deltaDistX;
 				mapX += stepX;
-				side = 0;
+				side = p->pos.x < (double)mapX ? OUEST : EST;
 			}
 			else
 			{
 				sideDistY += deltaDistY;
 				mapY += stepY;
-				side = 1;
+				side = p->pos.y < (double)mapY ? NORD : SUD;
 			}
 			//Check if ray has hit a wall
 			if (p->w->map[mapX + p->w->w_map * mapY] != '0') hit = 1;
 		}
 		//Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-		if (side == 0) perpWallDist = (mapX - p->pos.x + (1 - stepX) / 2) / rayDirX;
+		if (side == OUEST || side == EST) perpWallDist = (mapX - p->pos.x + (1 - stepX) / 2) / rayDirX;
 		else           perpWallDist = (mapY - p->pos.y + (1 - stepY) / 2) / rayDirY;
 
 		//Calculate height of line to draw on screen
@@ -89,9 +101,9 @@ void		*w3d_raycaster(t_thread *p)
 
 		//calculate lowest and highest pixel to fill in current stripe
 		int drawStart = -lineHeight / 2 + HEIGHT / 2;
-		if(drawStart < 0)drawStart = 0;
+		drawStart = (drawStart < 0) ? 0 : drawStart;
 		int drawEnd = lineHeight / 2 + HEIGHT / 2;
-		if(drawEnd >= HEIGHT)drawEnd = HEIGHT - 1;
+		drawEnd = (drawEnd >= HEIGHT) ? HEIGHT - 1 : drawEnd;
 
 		//choose wall color
 		int color;
@@ -105,21 +117,26 @@ void		*w3d_raycaster(t_thread *p)
 		}
 
 		//give x and y sides different brightness
-		if (side == 1) {color = color / 2;}
+		if (side == NORD)
+			color = w3d_darker(color, 0.75);
+		else if (side == SUD)
+			color = w3d_darker(color, 0.75);
+		else if (side == OUEST)
+			color = w3d_darker(color, 0.5);
 
 		//draw the pixels of the stripe as a vertical line
 		int sky;
 		if (drawStart > 0) {
-            sky = rand() % drawStart;
-            w3d_putpixel(p->w->pixels, x, sky, 0xFFFFFF);
-        }
+			sky = rand() % drawStart;
+			w3d_putpixel(p->w->pixels, x, sky, 0xFFFFFF);
+		}
 		for (int y = drawStart; y < drawEnd; y++) {
 			w3d_putpixel(p->w->pixels, x, y, color);
 		}
 		if (drawEnd < HEIGHT)
-            for (int y = drawEnd; y < HEIGHT; y++) {
-                w3d_putpixel(p->w->pixels, x, y, 0x123456);
-            }
+			for (int y = drawEnd; y < HEIGHT; y++) {
+				w3d_putpixel(p->w->pixels, x, y, 0x123456);
+			}
 	}
 	pthread_exit(NULL);
 }
@@ -148,6 +165,7 @@ int		w3d_draw(t_wolf3d *p)
 {
 	bzero(p->pixels, WIDTH * HEIGHT * 4);
 	w3d_thread(p);
+	mlx_clear_window (p->mlx, p->win);
 	mlx_put_image_to_window(p->mlx, p->win, p->img, 0, 0);
 	return (1);
 }
