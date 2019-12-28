@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   w3d_draw.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oouklich <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/28 21:51:19 by oouklich          #+#    #+#             */
+/*   Updated: 2019/12/28 22:11:21 by oouklich         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include <wolf3d.h>
+#include "../inc/wolf3d.h"
 
-int		w3d_darker(int color, float ratio)
+static int	w3d_darker(int color, float ratio)
 {
 	int	r;
 	int	g;
@@ -15,26 +26,26 @@ int		w3d_darker(int color, float ratio)
 
 static void	*w3d_process(t_thread *p)
 {
-	t_rcast	r;
-	int	x;
-	int	y;
+	t_rcast		r;
+	int			x;
+	int			y;
 
 	x = (p->x_x * WIDTH / NBTHREAD) - 1;
 	while (++x < (p->x_x + 1) * WIDTH / NBTHREAD)
 	{
 		r = w3d_raycaster(p->w, x);
-		//here ^
 		y = r.ext.x - 1;
-		while (++y < r.ext.y)
+		while (++y < r.ext.y && y < HEIGHT)
 		{
-			r.txt.x = (HEIGHT_TXT * (y + (r.line / 2) - (HEIGHT / 2)) / r.line);
+			r.txt.y = y + (r.line / 2) - (HEIGHT / 2);
+			r.txt.y = HEIGHT_TXT * r.txt.y / r.line;
 			r.color = p->w->txt.buf[r.txt_idx][HEIGHT_TXT * r.txt.y + r.txt.x];
 			r.color = w3d_darker(r.color, r.side);
 			p->w->pixels[x + WIDTH * y] = r.color;
 		}
-		if (r.ext.x > 0)
+		if (r.ext.x > 0 && r.sky < HEIGHT)
 			p->w->pixels[x + WIDTH * r.sky] = 0xFFFFFF;
-		if (r.ext.y < HEIGHT && (y = r.ext.y - 1) != 1337)
+		if (r.ext.y < HEIGHT && (y = r.ext.y - 1) < HEIGHT)
 			while (++y < HEIGHT)
 				p->w->pixels[x + WIDTH * y] = 0x123456;
 	}
@@ -45,7 +56,7 @@ void		w3d_thread(t_wolf3d *w)
 {
 	t_thread	t[NBTHREAD];
 	pthread_t	p[NBTHREAD];
-	int		i;
+	int			i;
 
 	i = -1;
 	while (++i < NBTHREAD)
@@ -63,8 +74,8 @@ void		w3d_thread(t_wolf3d *w)
 
 void		w3d_mini_map(t_wolf3d *p)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 
 	x = -1;
 	while (++x < p->w_map * 4 && (y = -1))
@@ -78,7 +89,7 @@ void		w3d_mini_map(t_wolf3d *p)
 		}
 }
 
-int		w3d_draw(t_wolf3d *p)
+int			w3d_draw(t_wolf3d *p)
 {
 	bzero(p->pixels, WIDTH * HEIGHT * 4);
 	w3d_thread(p);

@@ -6,7 +6,7 @@
 #    By: oouklich <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/24 18:58:22 by oouklich          #+#    #+#              #
-#    Updated: 2019/12/24 20:29:24 by oouklich         ###   ########.fr        #
+#    Updated: 2019/12/28 21:52:31 by oouklich         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,9 +20,7 @@ SRC = main.c\
       keys.c
 
 SRCS = $(addprefix srcs/w3d_, $(SRC))
-SRCS += srcs/print_map.c
 OBJS = $(SRC:%.c=objs/w3d_%.o)
-OBJS += objs/print_map.o
 OBJS_DIR = objs
 
 ifeq ($(shell uname), Darwin)

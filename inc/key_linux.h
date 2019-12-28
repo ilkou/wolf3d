@@ -6,11 +6,11 @@
 /*   By: oouklich <oouklich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:40:13 by oouklich          #+#    #+#             */
-/*   Updated: 2018/01/19 17:40:16 by oouklich         ###   ########.fr       */
+/*   Updated: 2019/12/28 22:20:10 by oouklich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef KEY_LINUX_H
+#ifndef KEY_LINUX_H
 # define KEY_LINUX_H
 
 /*
@@ -73,10 +73,10 @@
 ** Mouse
 */
 
-#define M_CLK_L 1
-#define M_CLK_R 3
-#define M_CLK_M 2
-#define M_SCR_U 4
-#define M_SCR_D 5
+# define M_CLK_L 1
+# define M_CLK_R 3
+# define M_CLK_M 2
+# define M_SCR_U 4
+# define M_SCR_D 5
 
-# endif
+#endif

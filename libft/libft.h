@@ -6,7 +6,7 @@
 /*   By: oouklich <ouklichoussama@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/06 19:15:58 by oouklich          #+#    #+#             */
-/*   Updated: 2019/11/21 16:21:45 by oouklich         ###   ########.fr       */
+/*   Updated: 2019/12/28 22:36:17 by oouklich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct		s_list
 # define RAND48_MULT_2	(0x0005)
 # define RAND48_ADD		(0x000b)
 
-void    *ft_realloc(void **ptr, size_t old, size_t len);
+void				*ft_realloc(void **ptr, size_t old, size_t len);
 double				ft_mind3(double a, double b, double c);
 double				ft_maxd3(double a, double b, double c);
 void				ft_swap_d(double *a, double *b);

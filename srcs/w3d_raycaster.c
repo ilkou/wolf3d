@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   w3d_raycaster.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oouklich <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/28 21:53:10 by oouklich          #+#    #+#             */
+/*   Updated: 2019/12/28 21:56:28 by oouklich         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include <wolf3d.h>
 
@@ -55,7 +66,7 @@ t_rcast	w3d_raycaster(t_wolf3d *p, int x)
 	r.ext.x = -r.line / 2 + HEIGHT / 2;
 	r.ext.x = (r.ext.x < 0) ? 0 : r.ext.x;
 	r.ext.y = r.line / 2 + HEIGHT / 2;
-	r.ext.y	= (r.ext.y >= HEIGHT) ? HEIGHT - 1 : r.ext.y;
+	r.ext.y = (r.ext.y >= HEIGHT) ? HEIGHT - 1 : r.ext.y;
 	r.txt_idx = p->map[h.curr.x + p->w_map * h.curr.y];
 	r.txt_idx = r.txt_idx > 0 && r.txt_idx < TOTAL_TXT ? r.txt_idx : 0;
 	if (r.side == OUEST || r.side == EST)
@@ -68,6 +79,6 @@ t_rcast	w3d_raycaster(t_wolf3d *p, int x)
 		r.txt.x = WIDTH_TXT - r.txt.x - 1;
 	if (r.side == SUD)
 		r.txt.x = WIDTH_TXT - r.txt.x - 1;
-	r.sky = rand() % r.ext.x;
+	r.sky = r.ext.x > 0 ? rand() % r.ext.x : r.sky;
 	return (r);
 }
