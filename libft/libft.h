@@ -25,7 +25,7 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
-# define BUFF_SIZE 100
+# define BUFF_SIZE 4000
 
 # define RAND48_SEED_0	(0x330e)
 # define RAND48_SEED_1	(0xabcd)

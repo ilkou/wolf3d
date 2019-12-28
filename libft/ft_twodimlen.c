@@ -17,7 +17,7 @@ int		ft_twodimlen(char **twodim)
 	int		s;
 
 	s = 0;
-	while (*twodim++)
+	while (twodim[s])
 		s++;
 	return (s);
 }

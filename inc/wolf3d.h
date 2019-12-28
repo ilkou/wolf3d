@@ -53,13 +53,15 @@ typedef struct			s_wolf3d
 	t_vec2d			dir;
 	t_vec2d			plane;
 	t_texture		txt;
-	char			*map;
+	int			*map;
 	int			w_map;
 	int			h_map;
 	void			*win;
 	void			*img;
 	void			*mlx;
 	int			*pixels;
+	void			*m_img;
+	int			*m_pixels;
 	int			bpp;
 	int			size_line;
 	int			endian;

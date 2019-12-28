@@ -63,9 +63,9 @@ $(NAME): $(OBJ)
 	@ar rc $(NAME) $^
 	@ranlib $(NAME) && echo "$(BUILD_PRINT)"
 
-COMPILE_OBJECT = gcc $(CFLAGS) -o $@ -c $< -I . 2>/dev/null && echo "$(OK_STRING)" || echo "$(KO_STRING)" 
+COMPILE_OBJECT = gcc $(CFLAGS) -o $@ -c $< -I . && echo "$(OK_STRING)" || echo "$(KO_STRING)" 
 
-%.o: %.c
+%.o: %.c libft.h
 	@echo "$(CLEAR_LINE)Compiling $< ==> $@ `$(COMPILE_OBJECT)`$(BEGIN_LINE)"
 
 clean:
