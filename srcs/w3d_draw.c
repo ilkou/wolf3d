@@ -1,16 +1,6 @@
 
 #include <wolf3d.h>
 
-int		w3d_putpixel(int *pixels, int x, int y, int color)
-{
-	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
-	{
-		pixels[y * WIDTH + x] = color;
-		return (1);
-	}
-	return (-1);
-}
-
 int		w3d_darker(int color, float ratio)
 {
 	int	r;
@@ -22,15 +12,31 @@ int		w3d_darker(int color, float ratio)
 	b = (int)((color & 0xFF) * ratio);
 	return (r << 16 | g << 8 | b);
 }
-#define texWidth 64
-#define texHeight 64
-void		*w3d_raycaster(t_thread *p)
+
+static void	*w3d_process(t_thread *p)
 {
+	t_rcast	r;
 	int	x;
+	int	y;
 
 	x = (p->x_x * WIDTH / NBTHREAD) - 1;
 	while (++x < (p->x_x + 1) * WIDTH / NBTHREAD)
 	{
+		r = w3d_raycaster(p->w, x);
+		//here ^
+		y = r.ext.x - 1;
+		while (++y < r.ext.y)
+		{
+			r.txt.x = (HEIGHT_TXT * (y + (r.line / 2) - (HEIGHT / 2)) / r.line);
+			r.color = p->w->txt.buf[r.txt_idx][HEIGHT_TXT * r.txt.y + r.txt.x];
+			r.color = w3d_darker(r.color, r.side);
+			p->w->pixels[x + WIDTH * y] = r.color;
+		}
+		if (r.ext.x > 0)
+			p->w->pixels[x + WIDTH * r.sky] = 0xFFFFFF;
+		if (r.ext.y < HEIGHT && (y = r.ext.y - 1) != 1337)
+			while (++y < HEIGHT)
+				p->w->pixels[x + WIDTH * y] = 0x123456;
 	}
 	pthread_exit(NULL);
 }
@@ -49,7 +55,7 @@ void		w3d_thread(t_wolf3d *w)
 		t[i].pos = w->pos;
 		t[i].dir = w->dir;
 		t[i].plane = w->plane;
-		pthread_create(&p[i], NULL, (void*)w3d_raycaster, &t[i]);
+		pthread_create(&p[i], NULL, (void*)w3d_process, &t[i]);
 	}
 	while (--i >= 0)
 		pthread_join(p[i], NULL);
@@ -67,6 +73,8 @@ void		w3d_mini_map(t_wolf3d *p)
 			p->m_pixels[y * p->w_map * 4 + x] = 0xAA000000;
 			if (p->map[(y / 4) * p->w_map + (x / 4)] == 0)
 				p->m_pixels[y * p->w_map * 4 + x] = 0xAAFFFFFF;
+			if (x / 4 == (int)p->pos.x && y / 4 == (int)p->pos.y)
+				p->m_pixels[y * p->w_map * 4 + x] = 0xAAFF0000;
 		}
 }
 

@@ -3,6 +3,7 @@
 
 int		w3d_keys(int key, t_wolf3d *p)
 {
+	t_vec2d next;
     double moveSpeed = 0.25;
     double rotSpeed = 10.0 * M_PI / 180.0;
 	if (key == K_ESC)
@@ -10,14 +11,22 @@ int		w3d_keys(int key, t_wolf3d *p)
 	//move forward if no wall in front of you
 	if (key == K_AR_U)
 	{
-		if(p->map[(int)(p->pos.x + p->dir.x * moveSpeed) + (int)(p->pos.y) * p->w_map] == 0) p->pos.x += p->dir.x * moveSpeed;
-		if(p->map[(int)(p->pos.x) + p->w_map * (int)(p->pos.y + p->dir.y * moveSpeed)] == 0) p->pos.y += p->dir.y * moveSpeed;
+		next.x = p->pos.x + p->dir.x * moveSpeed;
+		next.y = p->pos.y + p->dir.y * moveSpeed;
+		if(p->map[(int)next.x + (int)p->pos.y * p->w_map] == 0 && next.x > 0.00001 && (int)next.x < p->w_map)
+			p->pos.x = next.x;
+		if(p->map[(int)p->pos.x + p->w_map * (int)next.y] == 0 && next.y > 0.00001 && (int)next.y < p->h_map)
+			p->pos.y = next.y;
 	}
 	//move backwards if no wall behind you
 	if (key == K_AR_D)
 	{
-		if(p->map[(int)(p->pos.x - p->dir.x * moveSpeed) + (int)(p->pos.y) * p->w_map] == 0) p->pos.x -= p->dir.x * moveSpeed;
-		if(p->map[(int)(p->pos.x) + p->w_map * (int)(p->pos.y - p->dir.y * moveSpeed)] == 0) p->pos.y -= p->dir.y * moveSpeed;
+		next.x = p->pos.x - p->dir.x * moveSpeed;
+		next.y = p->pos.y - p->dir.y * moveSpeed;
+		if(p->map[(int)next.x + (int)p->pos.y * p->w_map] == 0 && next.x >= 0.00001 && (int)next.x < p->w_map)
+			p->pos.x = next.x;
+		if(p->map[(int)p->pos.x + p->w_map * (int)next.y] == 0 && next.y >= 0.00001 && (int)next.y < p->h_map)
+			p->pos.y = next.y;
 	}
 	//rotate to the right
     //rotate to the right

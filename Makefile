@@ -14,7 +14,8 @@ NAME = wolf3d
 
 SRC = main.c\
       map.c\
-      draw_lodev.c\
+      draw.c\
+      raycaster.c\
       load_texture.c\
       keys.c
 

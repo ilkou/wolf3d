@@ -1,12 +1,19 @@
 #ifndef WOLF3D_H
 # define WOLF3D_H
 
-# define WIDTH 800
-# define HEIGHT 800
+# define WIDTH 960
+# define HEIGHT 600
 
-# define NBTHREAD 4
+# define NBTHREAD 1
 
 # define TOTAL_TXT 8
+# define WIDTH_TXT 64
+# define HEIGHT_TXT 64
+
+# define NORD 0.5
+# define SUD 0.5
+# define EST 1.0
+# define OUEST 0.25
 
 #if defined(__APPLE__)
 # include <key_macos.h>
@@ -25,11 +32,6 @@
 #include <fcntl.h>
 #include <libft.h>
 
-typedef enum			e_side
-{
-	NORD = 0, SUD, EST, OUEST
-}				t_side;
-
 typedef enum			e_txt
 {
 	TXT_0 = 0, TXT_1, TXT_2, TXT_3, TXT_4, TXT_5, TXT_6, TXT_7
@@ -41,11 +43,40 @@ typedef struct			s_vec2d
 	float			y;
 }				t_vec2d;
 
+typedef struct			s_ivec2d
+{
+	int			x;
+	int			y;
+}				t_ivec2d;
+
 typedef struct			s_texture
 {
 	void			*img[TOTAL_TXT];
 	int			*buf[TOTAL_TXT];
 }				t_texture;
+
+typedef struct			s_help
+{
+	t_ivec2d		curr;
+	t_ivec2d		step;
+	t_vec2d			ray;
+	t_vec2d			delta;
+	t_vec2d			next;
+	double			x_mapped;
+	double			dist;
+	double			hit_x;
+}				t_help;
+
+typedef struct			s_rcast
+{
+	t_ivec2d		ext;
+	t_ivec2d		txt;
+	float			side;
+	int			txt_idx;
+	int			color;
+	int			line;
+	int			sky;
+}				t_rcast;
 
 typedef struct			s_wolf3d
 {
@@ -87,9 +118,10 @@ void	print_map(t_wolf3d *p);
 */
 
 int				w3d_map(t_wolf3d *p, char *file, int i, int j);
-int				w3d_putpixel(int *data, int x, int y, int color);
+//int				w3d_putpixel(int *data, int x, int y, int color);
 int				w3d_close(t_wolf3d *p);
 int				w3d_keys(int k, t_wolf3d *p);
+t_rcast				w3d_raycaster(t_wolf3d *p, int x);
 int				w3d_draw(t_wolf3d *p);
 int				w3d_load_texture(t_wolf3d *p);
 void				w3d_thread(t_wolf3d *p);
