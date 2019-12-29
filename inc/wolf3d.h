@@ -6,7 +6,7 @@
 /*   By: oouklich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/28 22:17:02 by oouklich          #+#    #+#             */
-/*   Updated: 2019/12/28 23:21:07 by oouklich         ###   ########.fr       */
+/*   Updated: 2019/12/29 01:00:54 by oouklich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define WIDTH 960
 # define HEIGHT 600
 
-# define NBTHREAD 1
+# define NBTHREAD 4
 
 # define TOTAL_TXT 8
 # define WIDTH_TXT 64
@@ -87,7 +87,6 @@ typedef struct		s_rcast
 	int				txt_idx;
 	int				color;
 	int				line;
-	int				sky;
 }					t_rcast;
 
 typedef struct		s_wolf3d
@@ -113,9 +112,6 @@ typedef struct		s_wolf3d
 typedef struct		s_thread
 {
 	t_wolf3d		*w;
-	t_vec2d			pos;
-	t_vec2d			dir;
-	t_vec2d			plane;
 	int				x_x;
 }					t_thread;
 

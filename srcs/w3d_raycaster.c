@@ -6,7 +6,7 @@
 /*   By: oouklich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/28 21:53:10 by oouklich          #+#    #+#             */
-/*   Updated: 2019/12/28 21:56:28 by oouklich         ###   ########.fr       */
+/*   Updated: 2019/12/29 02:19:56 by oouklich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	init_rcast(t_help *h, t_wolf3d *p, int x)
 	h->x_mapped = 2 * x / (double)WIDTH - 1;
 	h->ray.x = p->dir.x + p->plane.x * h->x_mapped;
 	h->ray.y = p->dir.y + p->plane.y * h->x_mapped;
-	h->curr.x = (int)p->pos.x;
-	h->curr.y = (int)p->pos.y;
+	h->curr.x = floor(p->pos.x);
+	h->curr.y = floor(p->pos.y);
 	h->delta.x = fabs(1.0 / h->ray.x);
 	h->delta.y = fabs(1.0 / h->ray.y);
 	h->step.x = h->ray.x < 0 ? -1 : 1;
@@ -38,13 +38,13 @@ void	find_wall(t_help *h, t_rcast *r, t_wolf3d *p)
 		{
 			h->next.x += h->delta.x;
 			h->curr.x += h->step.x;
-			r->side = h->ray.x > 0 ? OUEST : EST;
+			r->side = (int)p->pos.x < h->curr.x ? EST : OUEST;
 		}
 		else
 		{
 			h->next.y += h->delta.y;
 			h->curr.y += h->step.y;
-			r->side = h->ray.y > 0 ? NORD : SUD;
+			r->side = (int)p->pos.y > h->curr.y ? NORD : SUD;
 		}
 		if (p->map[h->curr.x + p->w_map * h->curr.y] != 0)
 			break ;
@@ -77,8 +77,7 @@ t_rcast	w3d_raycaster(t_wolf3d *p, int x)
 	r.txt.x = (int)(h.hit_x * (double)(WIDTH_TXT));
 	if (r.side == OUEST)
 		r.txt.x = WIDTH_TXT - r.txt.x - 1;
-	if (r.side == SUD)
+	if (r.side == SUD && h.ray.y > 0)
 		r.txt.x = WIDTH_TXT - r.txt.x - 1;
-	r.sky = r.ext.x > 0 ? rand() % r.ext.x : r.sky;
 	return (r);
 }

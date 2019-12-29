@@ -53,9 +53,9 @@ int				w3d_keys(int key, t_wolf3d *p)
 		w3d_move(p, next);
 	}
 	if (key == K_AR_R)
-		w3d_rot(&p->dir, &p->plane, -10.0 * M_PI / 180.0);
-	if (key == K_AR_L)
 		w3d_rot(&p->dir, &p->plane, 10.0 * M_PI / 180.0);
+	if (key == K_AR_L)
+		w3d_rot(&p->dir, &p->plane, -10.0 * M_PI / 180.0);
 	if (key == K_AR_U || key == K_AR_D || key == K_AR_R || key == K_AR_L)
 		w3d_draw(p);
 	return (1);

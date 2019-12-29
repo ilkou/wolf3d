@@ -6,7 +6,7 @@
 /*   By: oouklich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/28 21:51:19 by oouklich          #+#    #+#             */
-/*   Updated: 2019/12/28 22:11:21 by oouklich         ###   ########.fr       */
+/*   Updated: 2019/12/29 02:20:02 by oouklich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,16 @@ static void	*w3d_process(t_thread *p)
 		{
 			r.txt.y = y + (r.line / 2) - (HEIGHT / 2);
 			r.txt.y = HEIGHT_TXT * r.txt.y / r.line;
-			r.color = p->w->txt.buf[r.txt_idx][HEIGHT_TXT * r.txt.y + r.txt.x];
+			r.color = p->w->txt.buf[r.txt_idx][WIDTH_TXT * r.txt.y + r.txt.x];
 			r.color = w3d_darker(r.color, r.side);
 			p->w->pixels[x + WIDTH * y] = r.color;
 		}
-		if (r.ext.x > 0 && r.sky < HEIGHT)
-			p->w->pixels[x + WIDTH * r.sky] = 0xFFFFFF;
+		if (r.ext.x > 0 && (y = -1) < 0)
+			while (++y < r.ext.x)
+				p->w->pixels[x + WIDTH * y] = 0x2a2e33;
 		if (r.ext.y < HEIGHT && (y = r.ext.y - 1) < HEIGHT)
 			while (++y < HEIGHT)
-				p->w->pixels[x + WIDTH * y] = 0x123456;
+				p->w->pixels[x + WIDTH * y] = 0x2a2e33;
 	}
 	pthread_exit(NULL);
 }
@@ -63,9 +64,6 @@ void		w3d_thread(t_wolf3d *w)
 	{
 		t[i].x_x = i;
 		t[i].w = w;
-		t[i].pos = w->pos;
-		t[i].dir = w->dir;
-		t[i].plane = w->plane;
 		pthread_create(&p[i], NULL, (void*)w3d_process, &t[i]);
 	}
 	while (--i >= 0)
