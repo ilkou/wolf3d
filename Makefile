@@ -28,7 +28,7 @@ MLX_DIR = minilibx_macos
 MLX = -lmlx -framework OpenGL -framework AppKit
 else
 MLX_DIR = minilibx_linux
-MLX = -lm -lmlx -lXext -lX11
+MLX = -lm -lmlx -lXext -lX11 -lbsd
 endif
 
 LIBFT = -lft
